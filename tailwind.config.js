@@ -1,4 +1,10 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
+// const colors = require('tailwindcss/colors')
+// theme.extend: {
+//     colors:  {
+//         lime: colors.lime,
+//     }
+// }
 
 module.exports = {
     purge: ['./storage/framework/views/*.php', './resources/views/**/*.blade.php'],

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ContactController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Route::post('/login', [AuthController::class, 'login']);
+//Route::post('/logout', [AuthController::class, 'logout']);
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('/contacts', [ContactController::class, 'getContacts']);
+    Route::get('/messages/{contact}', [ContactController::class, 'getMessages']);
+    Route::post('/messages/{contact}', [ContactController::class, 'addMessage']);
+    Route::put('/messages/{message}', [ContactController::class, 'updateMessage']);
+    Route::delete('/messages/{message}', [ContactController::class, 'deleteMessage']);
 });
