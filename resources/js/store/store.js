@@ -15,6 +15,8 @@ const store = createStore(
         unreads: unreadReducer,
         messages: messagesReducer,
         activeContact: activeContactReducer,
+        loggedUser: null,
+        status: {}
     }),
     composeWithDevTools(
         applyMiddleware(thunk),

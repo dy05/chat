@@ -56,6 +56,10 @@ class User extends Authenticatable
 
     public static function all($columns = ['*'])
     {
+        if (!Auth::user()) {
+            return parent::all($columns);
+        }
+
         return (new static)->newQuery()
             ->where('id', '!=', Auth::user()->id)
             ->get(is_array($columns) ? $columns : func_get_args());

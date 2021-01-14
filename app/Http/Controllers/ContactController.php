@@ -7,6 +7,7 @@ use App\Notifications\MessageReceived;
 use App\Repositories\MessageRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class ContactController extends Controller
 {
@@ -23,6 +24,15 @@ class ContactController extends Controller
 
     public function home()
     {
+//        Cache::rememberForever('lol', function() {
+//            return 'Ok';
+//        });
+
+
+//        dd(Cache::get('lol'));
+
+        echo Cache::get('lol');
+        die();
         return view('conversations.api');
     }
 

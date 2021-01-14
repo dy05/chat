@@ -11,7 +11,7 @@ import {
     getMessages,
 } from '../store/modules/AppActions'
 import MessageBox from "./MessageBox";
-// import { Link } from 'react-router-dom'
+import { Link, useParams } from "react-router-dom";
 // import { addMessage, getContacts } from '../store/modules/AppActions'
 
 function Contact({loading = true, users = [], unreads = [], activeContact = {}}) {
@@ -29,12 +29,18 @@ function Contact({loading = true, users = [], unreads = [], activeContact = {}})
             {
                 users.map((user, id) => (
                     <li className={`flex${id > 0 ? ' mt-2' : ''}`} key={user.id}>
-                        <a className={`w-full rounded-md p-4 ${activeContact != null && activeContact.id == user.id ? 'bg-green-100' : 'bg-gray-100'}`}
-                            href={`/${user.slug}`}
+                        <Link className={`w-full rounded-md p-4 ${activeContact != null && activeContact.id == user.id ? 'bg-green-100' : 'bg-gray-100'}`}
+                            to={`/${user.slug}`}
                         >
                             {user.name}
                             { unreads[user.id] ? `&nbsp;(${unreads[user.id]})` : '' }
-                        </a>
+                        </Link>
+                        {/*<a className={`w-full rounded-md p-4 ${activeContact != null && activeContact.id == user.id ? 'bg-green-100' : 'bg-gray-100'}`}*/}
+                        {/*    href={`/${user.slug}`}*/}
+                        {/*>*/}
+                        {/*    {user.name}*/}
+                        {/*    { unreads[user.id] ? `&nbsp;(${unreads[user.id]})` : '' }*/}
+                        {/*</a>*/}
                     </li>
                 ))
             }
@@ -96,37 +102,24 @@ function DiscussionComponent({loading = true, users = [], unreads = [], activeUs
 function Discussion() {
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(false)
-    let hasActiveUser = false
-    let activeUser = $discussion.getAttribute('data-user')
-    if (activeUser != null && activeUser.length > 0) {
-        activeUser = JSON.parse(activeUser)
-        if (!isNaN(parseInt(activeUser.id))) {
-            hasActiveUser = true
-        }
-    }
+    const { contact } = useParams();
 
     useState(async () => {
         setLoading(true)
-        if (hasActiveUser) {
-            await dispatch(getMessages(activeUser.slug));
-            // dispatch(getMessages(activeUser.slug));
-        } else {
-            await dispatch(getContacts());
-            // dispatch(getContacts());
-        }
-
+        await dispatch(getContacts(contact));
         setLoading(false);
-        // setTimeout(() => setLoading(false), 14000)
     })
 
+    console.log(contact)
     const users = useSelector(usersSelector)
     const unreads = useSelector(unreadSelector)
     const messages = useSelector(messagesSelector)
     const activeContact = useSelector(activeContactSelector)
+    const loggedUser = useSelector(({loggedUser}) => loggedUser)
 
     return (
         <DiscussionComponent users={users} unreads={unreads} loading={loading}
-             activeUser={activeUser} activeContact={activeContact} messages={messages}/>
+             activeUser={loggedUser} activeContact={activeContact} messages={messages}/>
     )
 }
 

@@ -34,7 +34,7 @@ export const addMessage = (message) => async (dispatch) => {
     // data: message,
 }
 
-export const getContacts = () => async (dispatch) => {
+export const getContacts = (contactSlug = null) => async (dispatch) => {
     await fetchApi('/contacts', {}).then((data) => {
         dispatch({
             type: SET_USERS,
@@ -46,7 +46,7 @@ export const getContacts = () => async (dispatch) => {
         })
         dispatch({
             type: SET_ACTIVE_CONTACT,
-            data: null,
+            data: contactSlug === undefined ? null : contactSlug,
         })
     })
 }
